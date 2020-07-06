@@ -94,7 +94,7 @@ $(function () {
 													</td>
 													<td>${subtotal} Ks</td>
 													<td align="center">
-														<button type="button" class="btn btn-danger btn-sm btn-remove">&times;</button>
+														<button type="button" class="btn btn-danger btn-sm btn-remove" data-id="${i}">&times;</button>
 													</td>
 												<tr>`;
 
@@ -102,7 +102,7 @@ $(function () {
 				
 				tfootData += `<tr>
 												<td colspan="4">
-													<button class="btn btn-light btn-block" id="btn-checkout">Check Out</button>
+													<button type="button" class="btn btn-light btn-block" id="btn-checkout">Check Out</button>
 												</td>
 											</tr>`;
 
@@ -163,4 +163,36 @@ $(function () {
 
 	}) // end of minus quantity
 
-})
+
+	// remove item
+	$('tbody').on('click', '.btn-remove', function() {
+		
+		let id = $(this).data('id');
+
+		let menuString = localStorage.getItem('menulist');
+		let menuArray = JSON.parse(menuString);
+
+		$.each(menuArray, function(i, v) {
+			if (i == id) {
+				menuArray.splice(i, 1);
+			}
+		});
+
+		let menuData = JSON.stringify(menuArray);
+		localStorage.setItem('menulist', menuData);
+
+		showTable();
+		
+	});	// end of remove item
+
+
+	// delete all items
+	$('tfoot').on('click', '#btn-checkout', function() {
+
+		localStorage.clear();
+		showTable();
+			
+	}); // end of delete all items
+
+
+}) // end of ready function
